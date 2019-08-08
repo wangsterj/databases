@@ -13,18 +13,18 @@ module.exports = {
       });
     }, // a function which produces all the messages
     post: function (data, callback) {
-      var user_ID;
+      var userID;
       var querySearch = `SELECT ID FROM users WHERE username = '${data.username}';`;
       var query = db.query(querySearch, function(err, values) {
         if (err) {
           throw err;
         } else {
-          user_ID = values[0].ID;
+          userID = values[0].ID;
         }
-      })
+      });
 
       query.on('end', () => {
-        var queryString = `INSERT INTO messages (messageText, users_ID) VALUES(?, ${user_ID})`;
+        var queryString = `INSERT INTO messages (messageText, users_ID) VALUES(?, ${userID})`;
         db.query(queryString, data.message, function(err, values) {
           if (err) {
             callback(err, null);
@@ -34,17 +34,6 @@ module.exports = {
         });
       });
     }
-
-
-    //   var queryString = `INSERT INTO messages (messageText, users_ID) VALUES(?, 1)`;
-    //   db.query(queryString, data.message, function(err, values, fields) {
-    //     if (err) {
-    //       callback(err, null, null);
-    //     } else {
-    //       callback(null, values, fields);
-    //     }
-    //   });
-    // }
   },
 
   users: {
@@ -64,14 +53,14 @@ module.exports = {
         if (err) {
           throw err;
         } else if (values.length === 0) {
-            var queryString = `INSERT INTO users (username) VALUES( '${data.username}')`;
-            db.query(queryString, function(err, values) {
-              if (err) {
-                callback(err, null);
-              } else {
-                callback(null, values);
-              }
-            });
+          var queryString = `INSERT INTO users (username) VALUES( '${data.username}')`;
+          db.query(queryString, function(err, values) {
+            if (err) {
+              callback(err, null);
+            } else {
+              callback(null, values);
+            }
+          });
         }
       });
     }

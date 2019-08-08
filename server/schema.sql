@@ -1,9 +1,10 @@
+/* Resets DATABASE chat */
+DROP DATABASE chat;
+
 CREATE DATABASE chat;
 
 USE chat;
-/* Deletes table */
-truncate messages, users, rooms;
-drop table users, rooms, messages;
+
 
 CREATE TABLE users (
   ID int auto_increment primary key,

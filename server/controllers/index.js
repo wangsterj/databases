@@ -7,7 +7,7 @@ module.exports = {
     get: function (req, res) {
       models.messages.get(function(err, values) {
         var data = JSON.stringify(values);
-        if (err) throw err;
+        if (err) { throw err; }
         res.send(data);
       });
     }, // a function which handles a get request for all messages
