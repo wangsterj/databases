@@ -13,9 +13,9 @@ module.exports = {
       });
     }, // a function which produces all the messages
     post: function (data, callback) {
-      var queryString = `INSERT INTO messages (messageText) VALUES('${data.message}')`;
+      var queryString = `INSERT INTO messages (messageText, users_ID) VALUES(?, 1)`;
       console.log(queryString);
-      db.query(queryString, function(err, values, fields) {
+      db.query(queryString, data.message, function(err, values, fields) {
         if (err) {
           callback(err, null, null);
         } else {
