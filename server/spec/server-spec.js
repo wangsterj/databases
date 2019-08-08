@@ -20,7 +20,8 @@ describe('Persistent Node Chat Server', function() {
 
     /* Empty the db table before each test so that multiple tests
      * (or repeated runs of the tests) won't screw each other up: */
-    dbConnection.query('truncate ' + tablename, done);
+    dbConnection.query('truncate ' + 'messages', done);
+    dbConnection.query('truncate ' + 'users', done);
   });
 
   afterEach(function() {
@@ -49,7 +50,7 @@ describe('Persistent Node Chat Server', function() {
 
         // TODO: You might have to change this test to get all the data from
         // your message table, since this is schema-dependent.
-        var queryString = 'SELECT messages.message, users.username, rooms.roomname FROM messages INNER JOIN users, rooms ON messages.user_ID = users.ID AND messages.room_ID = rooms.ID';
+        var queryString = 'SELECT messages.messageText, users.username FROM messages, users WHERE users.ID = messages.users_ID';
         var queryArgs = [];
 
         dbConnection.query(queryString, queryArgs, function(err, results) {
@@ -57,7 +58,7 @@ describe('Persistent Node Chat Server', function() {
           expect(results.length).to.equal(1);
 
           // TODO: If you don't have a column named text, change this test.
-          expect(results[0].message).to.equal('In mercy\'s name, three days is all I need.');
+          expect(results[0].messageText).to.equal('In mercy\'s name, three days is all I need.');
 
           done();
         });

@@ -5,12 +5,14 @@ var app = express();
 module.exports = {
   messages: {
     get: function (req, res) {
-
-      // models.messages.get()
+      models.messages.get(function(err, values) {
+        var data = JSON.stringify(values);
+        if (err) throw err;
+        res.send(data);
+      });
     }, // a function which handles a get request for all messages
     post: function (req, res) {
       var message = req.body;
-      console.log('Message received: ' + message);
       models.messages.post(message, function() {
         res.send('success');
       });
@@ -25,7 +27,6 @@ module.exports = {
     },
     post: function (req, res) {
       var user = req.body;
-      console.log('Controller for users received: ' + user);
       models.users.post(user, function() {
         res.send('success');
       });

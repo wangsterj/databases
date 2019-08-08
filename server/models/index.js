@@ -4,60 +4,74 @@ var request = require('request'); // You might need to npm install the request m
 module.exports = {
   messages: {
     get: function (callback) {
-      db.query('SELECT messages.message, users.username, rooms.roomname FROM messages INNER JOIN users, rooms ON messages.user_ID = users.ID AND messages.room_ID = room.ID', function(err, values, fields) {
+      db.query('SELECT messages.messageText, users.username FROM messages, users WHERE users.ID = messages.users_ID', function(err, values) {
         if (err) {
-          callback(err, null, null);
+          callback(err, null);
         } else {
-          callback(null, values, fields);
+          callback(null, values);
         }
       });
     }, // a function which produces all the messages
     post: function (data, callback) {
-      var queryString = `INSERT INTO messages (messageText, users_ID) VALUES(?, 1)`;
-      console.log(queryString);
-      db.query(queryString, data.message, function(err, values, fields) {
+      var user_ID;
+      var querySearch = `SELECT ID FROM users WHERE username = '${data.username}';`;
+      var query = db.query(querySearch, function(err, values) {
         if (err) {
-          callback(err, null, null);
+          throw err;
         } else {
-          callback(null, values, fields);
+          user_ID = values[0].ID;
         }
+      })
+
+      query.on('end', () => {
+        var queryString = `INSERT INTO messages (messageText, users_ID) VALUES(?, ${user_ID})`;
+        db.query(queryString, data.message, function(err, values) {
+          if (err) {
+            callback(err, null);
+          } else {
+            callback(null, values);
+          }
+        });
       });
     }
-    // post: function (message, callback) {
-    //   var queryMessage = `INSERT INTO messages (message) VALUES('${connection.escape(message.message)}')`
-    //   // "INSERT INTO messages (message) VALUES ('"+message.message+"')";
-    //   // INSERT INTO users (username) VALUES ('"+message.username+"') INSERT INTO rooms (roomname) VALUES ('"+message.roomname+"');";
-    //   console.log(queryMessage)
-    //   db.query(queryMessage, function(err, values, fields){
-    //     if (err){
-    //       callback(err,null, null);
+
+
+    //   var queryString = `INSERT INTO messages (messageText, users_ID) VALUES(?, 1)`;
+    //   db.query(queryString, data.message, function(err, values, fields) {
+    //     if (err) {
+    //       callback(err, null, null);
     //     } else {
     //       callback(null, values, fields);
     //     }
-    //     // callback();
     //   });
-    // } // a function which can be used to insert a message into the database
+    // }
   },
 
   users: {
     // Ditto as above.
     get: function (callback) {
-      db.query('SELECT users.username FROM users', function(err, values, fields) {
+      db.query('SELECT users.username FROM users', function(err, values) {
         if (err) {
-          callback(err, null, null);
+          callback(err, null);
         } else {
-          callback(null, values, fields);
+          callback(null, values);
         }
       });
     },
     post: function (data, callback) {
-      var queryString = `INSERT INTO users (username) VALUES( '${data.username}')`;
-      console.log(queryString);
-      db.query(queryString, function(err, values, fields) {
+      var querySearch = `SELECT ID FROM users WHERE username = '${data.username}';`;
+      db.query(querySearch, function(err, values) {
         if (err) {
-          callback(err, null, null);
-        } else {
-          callback(null, values, fields);
+          throw err;
+        } else if (values.length === 0) {
+            var queryString = `INSERT INTO users (username) VALUES( '${data.username}')`;
+            db.query(queryString, function(err, values) {
+              if (err) {
+                callback(err, null);
+              } else {
+                callback(null, values);
+              }
+            });
         }
       });
     }
