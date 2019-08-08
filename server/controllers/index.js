@@ -10,8 +10,8 @@ module.exports = {
     }, // a function which handles a get request for all messages
     post: function (req, res) {
       var message = req.body;
-      console.log("Message received: " + message)
-      models.messages.post(message, function(){
+      console.log('Message received: ' + message);
+      models.messages.post(message, function() {
         res.send('success');
       });
       // console.log(message)
@@ -21,12 +21,12 @@ module.exports = {
   users: {
     // Ditto as above
     get: function (req, res) {
-      console.log('controller')
+      console.log('controller');
     },
     post: function (req, res) {
       var user = req.body;
-      console.log("Controller for users received: " + user)
-      models.users.post(user, function(){
+      console.log('Controller for users received: ' + user);
+      models.users.post(user, function() {
         res.send('success');
       });
     }

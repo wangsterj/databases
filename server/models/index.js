@@ -4,20 +4,20 @@ var request = require('request'); // You might need to npm install the request m
 module.exports = {
   messages: {
     get: function (callback) {
-      db.query("SELECT messages.message, users.username, rooms.roomname FROM messages INNER JOIN users, rooms ON messages.user_ID = users.ID AND messages.room_ID = room.ID", function(err, values, fields){
-        if (err){
-          callback(err,null, null);
+      db.query('SELECT messages.message, users.username, rooms.roomname FROM messages INNER JOIN users, rooms ON messages.user_ID = users.ID AND messages.room_ID = room.ID', function(err, values, fields) {
+        if (err) {
+          callback(err, null, null);
         } else {
           callback(null, values, fields);
         }
       });
     }, // a function which produces all the messages
     post: function (data, callback) {
-      var queryString = `INSERT INTO messages (message) VALUES( '${data.message}')`;
-      console.log(queryString)
-      db.query(queryString, function(err, values, fields){
-        if (err){
-          callback(err,null, null);
+      var queryString = `INSERT INTO messages (messageText) VALUES('${data.message}')`;
+      console.log(queryString);
+      db.query(queryString, function(err, values, fields) {
+        if (err) {
+          callback(err, null, null);
         } else {
           callback(null, values, fields);
         }
@@ -42,8 +42,8 @@ module.exports = {
   users: {
     // Ditto as above.
     get: function (callback) {
-      db.query("SELECT users.username FROM users", function(err, values, fields){
-        if (err){
+      db.query('SELECT users.username FROM users', function(err, values, fields) {
+        if (err) {
           callback(err, null, null);
         } else {
           callback(null, values, fields);
@@ -52,10 +52,10 @@ module.exports = {
     },
     post: function (data, callback) {
       var queryString = `INSERT INTO users (username) VALUES( '${data.username}')`;
-      console.log(queryString)
-      db.query(queryString, function(err, values, fields){
-        if (err){
-          callback(err,null, null);
+      console.log(queryString);
+      db.query(queryString, function(err, values, fields) {
+        if (err) {
+          callback(err, null, null);
         } else {
           callback(null, values, fields);
         }
