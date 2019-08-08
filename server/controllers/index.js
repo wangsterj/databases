@@ -23,7 +23,11 @@ module.exports = {
   users: {
     // Ditto as above
     get: function (req, res) {
-      console.log('controller');
+      models.users.get(function(err, values) {
+        var data = JSON.stringify(values);
+        if (err) { throw err; }
+        res.send(data);
+      });
     },
     post: function (req, res) {
       var user = req.body;

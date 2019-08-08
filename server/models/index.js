@@ -4,7 +4,7 @@ var request = require('request'); // You might need to npm install the request m
 module.exports = {
   messages: {
     get: function (callback) {
-      db.query('SELECT messages.messageText, users.username FROM messages, users WHERE users.ID = messages.users_ID', function(err, values) {
+      db.query('SELECT * FROM messages', function(err, values) {
         if (err) {
           callback(err, null);
         } else {
@@ -39,7 +39,7 @@ module.exports = {
   users: {
     // Ditto as above.
     get: function (callback) {
-      db.query('SELECT users.username FROM users', function(err, values) {
+      db.query('SELECT * FROM users', function(err, values) {
         if (err) {
           callback(err, null);
         } else {
