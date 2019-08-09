@@ -4,7 +4,7 @@ var request = require('request'); // You might need to npm install the request m
 module.exports = {
   messages: {
     get: function (callback) {
-      db.query('SELECT * FROM messages', function(err, values) {
+      db.query('SELECT messages.messageText, users.username FROM messages, users WHERE messages.users_ID = users.ID', function(err, values) {
         if (err) {
           callback(err, null);
         } else {
@@ -25,7 +25,7 @@ module.exports = {
 
       query.on('end', () => {
         var queryString = `INSERT INTO messages (messageText, users_ID) VALUES(?, ${userID})`;
-        db.query(queryString, data.message, function(err, values) {
+        db.query(queryString, data.messageText, function(err, values) {
           if (err) {
             callback(err, null);
           } else {
